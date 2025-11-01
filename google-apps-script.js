@@ -17,71 +17,108 @@
 
 function doPost(e) {
   try {
-    // Parse incoming data
-    const data = JSON.parse(e.postData.contents);
-    
-    // Get active spreadsheet
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
-    // Check if header row exists, if not create it
-    if (sheet.getLastRow() === 0) {
-      const headers = [
-        'Tidspunkt',
-        'Kundetype',
-        'Pakke',
-        'Fornavn',
-        'Etternavn',
-        'Gatenavn',
-        'Husnr',
-        'Oppgang',
-        'Postnr',
-        'Poststed',
-        'Telefon',
-        'E-post'
-      ];
-      sheet.appendRow(headers);
-      
-      // Format header row
-      const headerRange = sheet.getRange(1, 1, 1, headers.length);
-      headerRange.setFontWeight('bold');
-      headerRange.setBackground('#4285f4');
-      headerRange.setFontColor('#ffffff');
+    // Validate request
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error('Invalid request format');
+    }
+
+    // Parse incoming data with error handling
+    let data;
+    try {
+      data = JSON.parse(e.postData.contents);
+    } catch (parseError) {
+      throw new Error('Failed to parse request data: ' + parseError.message);
     }
     
-    // Prepare row data
-    const rowData = [
-      data.timestamp || new Date().toLocaleString('nb-NO'),
-      data.customer_type || '',
-      data.package_type || '',
-      data.fornavn || '',
-      data.etternavn || '',
-      data.gatenavn || '',
-      data.husnr || '',
-      data.oppgang || '',
-      data.postnr || '',
-      data.poststed || '',
-      data.telefon || '',
-      data.epost || ''
-    ];
+    // Get active spreadsheet with error handling
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    if (!spreadsheet) {
+      throw new Error('Failed to access spreadsheet');
+    }
+    const sheet = spreadsheet.getActiveSheet();
     
-    // Append data to sheet
-    sheet.appendRow(rowData);
-    
-    // Auto-resize columns for better readability
-    sheet.autoResizeColumns(1, rowData.length);
+    // Lock the sheet for writing to prevent concurrent modification issues
+    const lock = LockService.getScriptLock();
+    try {
+      if (!lock.tryLock(30000)) {
+        throw new Error('Could not obtain lock');
+      }
+      
+      // Check if header row exists, if not create it
+      if (sheet.getLastRow() === 0) {
+        const headers = [
+          'Tidspunkt',
+          'Kundetype',
+          'Pakke',
+          'Fornavn',
+          'Etternavn',
+          'Gatenavn',
+          'Husnr',
+          'Oppgang',
+          'Postnr',
+          'Poststed',
+          'Telefon',
+          'E-post'
+        ];
+        sheet.appendRow(headers);
+        
+        // Format header row
+        const headerRange = sheet.getRange(1, 1, 1, headers.length);
+        headerRange.setFontWeight('bold');
+        headerRange.setBackground('#4285f4');
+        headerRange.setFontColor('#ffffff');
+        
+        // Freeze header row
+        sheet.setFrozenRows(1);
+      }
+      
+      // Prepare and validate row data
+      const rowData = [
+        data.timestamp || new Date().toISOString(),
+        data.customer_type || '',
+        data.package_type || '',
+        data.fornavn || '',
+        data.etternavn || '',
+        data.gatenavn || '',
+        data.husnr || '',
+        data.oppgang || '',
+        data.postnr || '',
+        data.poststed || '',
+        data.telefon || '',
+        data.epost || ''
+      ];
+      
+      // Append data to sheet
+      sheet.appendRow(rowData);
+      
+      // Auto-resize columns for better readability
+      sheet.autoResizeColumns(1, rowData.length);
+      
+    } finally {
+      // Always release the lock
+      lock.releaseLock();
+    }
     
     // Return success response
     return ContentService.createTextOutput(
-      JSON.stringify({ result: 'success', row: sheet.getLastRow() })
+      JSON.stringify({
+        result: 'success',
+        row: sheet.getLastRow(),
+        timestamp: new Date().toISOString()
+      })
     ).setMimeType(ContentService.MimeType.JSON);
     
   } catch (error) {
-    // Log error
-    Logger.log('Error: ' + error.toString());
+    // Log error for debugging
+    console.error('Error in doPost:', error);
     
     // Return error response
     return ContentService.createTextOutput(
-      JSON.stringify({ result: 'error', message: error.toString() })
+      JSON.stringify({
+        result: 'error',
+        message: error.message,
+        timestamp: new Date().toISOString()
+      })
     ).setMimeType(ContentService.MimeType.JSON);
   }
 }
@@ -94,7 +131,7 @@ function testDoPost() {
   const testData = {
     postData: {
       contents: JSON.stringify({
-        timestamp: new Date().toLocaleString('nb-NO'),
+        timestamp: new Date().toISOString(),
         customer_type: 'Privat',
         package_type: 'liten',
         fornavn: 'Test',
@@ -111,9 +148,5 @@ function testDoPost() {
   };
   
   const result = doPost(testData);
-  Logger.log(result.getContent());
+  console.log('Test result:', result.getContent());
 }
-
-
-
-
