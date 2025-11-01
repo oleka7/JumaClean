@@ -1,0 +1,440 @@
+/* Juma Clean Form Styles */
+:root{
+  --background:#f8fafc; --card:#fff; --border:#e2e8f0; --foreground:#0f172a;
+  --muted:#f1f5f9; --primary:#3b82f6; --primary-dark:#2563eb; --accent:#10b981;
+  --shadow:0 4px 12px rgba(0,0,0,.08);
+  /* Avfallstyper (fargeprikker) */
+  --mat:#8B5A2B; --rest:#228B22; --glass:#FF8C00; --papir:#1E90FF; --plast:#808080;
+  /* Validering */
+  --error:#dc2626; --error-bg:#fef2f2; --error-border:#fecaca;
+}
+
+.juma-clean-form-container{
+  max-width: 56rem;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--background) 0%, var(--muted) 50%, var(--background) 100%);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+.juma-form-header{
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.juma-form-header h1{
+  margin: 0 0 .25rem;
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+.juma-form-header p{
+  margin: 0;
+  color: #475569;
+}
+
+/* Fremdrift (4 steg) */
+.juma-progress{
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin: 0 0 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+.step{
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.step-line{
+  position: absolute;
+  left: 50%;
+  top: 1.2rem;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  z-index: -1;
+}
+
+.step:first-child .step-line{
+  display: none;
+}
+
+.step-circle{
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  margin: 0 auto .25rem;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--border);
+  background: #fff;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.step.active .step-circle,
+.step.completed .step-circle{
+  border-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary), #60a5fa);
+  color: #fff;
+}
+
+.step-label{
+  font-size: .9rem;
+  color: #64748b;
+}
+
+.step.active .step-label{
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.juma-form-main{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+.juma-form-step{
+  display: block;
+}
+
+.juma-form-step.hidden{
+  display: none !important;
+}
+
+fieldset{
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  padding: 1rem 1.25rem;
+  margin: 0 0 1rem;
+}
+
+legend{
+  font-weight: 700;
+  padding: 0 .25rem;
+}
+
+.form-group{
+  margin: 0 0 .9rem;
+}
+
+label{
+  display: block;
+  font-weight: 600;
+  margin: 0 0 .35rem;
+}
+
+input, select{
+  width: 100%;
+  padding: .6rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: .5rem;
+  font-size: 1rem;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+input[type="number"]{
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.grid{
+  display: grid;
+  gap: 1rem;
+}
+
+.grid-2{
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3{
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 720px){
+  .grid-2, .grid-3{
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn{
+  display: inline-block;
+  border: 0;
+  border-radius: .6rem;
+  padding: .8rem 1.1rem;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.btn:hover{
+  background: var(--primary-dark);
+}
+
+.btn-secondary{
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-secondary:hover{
+  background: #cbd5e1;
+}
+
+.btn:disabled, .btn-disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--muted);
+  color: #666;
+}
+
+.btn:disabled:hover, .btn-disabled:hover{
+  background: var(--muted);
+  color: #666;
+}
+
+.btn-row{
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.price-summary{
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.3);
+  border-radius: .9rem;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.price-lines{
+  display: grid;
+  gap: .4rem;
+}
+
+.price-line{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+}
+
+.price-total{
+  margin-top: .6rem;
+  padding-top: .6rem;
+  border-top: 1px dashed rgba(16,185,129,.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--accent);
+}
+
+.muted{
+  color: #64748b;
+  margin: .35rem 0 0;
+}
+
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Validering */
+.error{
+  border-color: var(--error) !important;
+  background: var(--error-bg);
+}
+
+.error-msg{
+  color: var(--error);
+  font-size: .85rem;
+  margin-top: .35rem;
+}
+
+.hidden{
+  display: none !important;
+}
+
+.dot{
+  width: .7rem;
+  height: .7rem;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: .5rem;
+}
+
+.color-dot{
+  width: .9rem;
+  height: .9rem;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: .5rem;
+  vertical-align: middle;
+  border: 2px solid rgba(0,0,0,.1);
+}
+
+/* Bin selection styling */
+.bin-selection{
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 2px solid var(--border);
+  border-radius: .75rem;
+  transition: all 0.3s ease;
+}
+
+.bin-selection:hover{
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.02);
+}
+
+.bin-checkbox{
+  margin-bottom: 0.75rem;
+}
+
+.bin-checkbox label{
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bin-checkbox input[type="checkbox"]{
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+
+.bin-counts{
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Radio button styling */
+input[type="radio"]{
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+
+.form-group label:has(input[type="radio"]){
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.form-group label:has(input[type="radio"]:checked){
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.form-group label:has(input[type="radio"]):hover{
+  border-color: var(--primary);
+}
+
+.mat .dot{background: var(--mat)}
+.rest .dot{background: var(--rest)}
+.glass .dot{background: var(--glass)}
+.papir .dot{background: var(--papir)}
+.plast .dot{background: var(--plast)}
+
+/* reCAPTCHA styling */
+.g-recaptcha{
+  margin: 1rem 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px){
+  .juma-clean-form-container{
+    padding: 1rem;
+  }
+
+  .juma-progress{
+    flex-direction: column;
+    gap: .5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Skjul alle steg unntatt det aktive på mobil */
+  .step:not(.active){
+    display: none;
+  }
+
+  .step.active{
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .step-circle{
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .step-label{
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .step-line{
+    display: none;
+  }
+
+  .btn-row{
+    flex-direction: column;
+  }
+
+  .btn{
+    width: 100%;
+    text-align: center;
+  }
+}
